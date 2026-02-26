@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ClothingStore.Data;
@@ -17,19 +16,19 @@ namespace ClothingStore.Controllers
         }
 
         // GET: Brands
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var brands = await _context.Brands.ToListAsync();
+            var brands = _context.Brands.ToList();
             return View(brands);
         }
 
         // GET: Brands/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null) return NotFound();
 
-            var brand = await _context.Brands
-                .FirstOrDefaultAsync(b => b.BrandId == id);
+            var brand = _context.Brands
+                .FirstOrDefault(b => b.BrandId == id);
 
             if (brand == null) return NotFound();
 
@@ -45,24 +44,24 @@ namespace ClothingStore.Controllers
         // POST: Brands/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Country,Description,FoundedYear")] Brand brand)
+        public IActionResult Create(Brand brand)
         {
             if (!ModelState.IsValid)
                 return View(brand);
 
             _context.Brands.Add(brand);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
             TempData["SuccessMessage"] = "Brand added successfully!";
             return RedirectToAction(nameof(Index));
         }
 
         // GET: Brands/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null) return NotFound();
 
-            var brand = await _context.Brands.FindAsync(id);
+            var brand = _context.Brands.Find(id);
             if (brand == null) return NotFound();
 
             return View(brand);
@@ -71,7 +70,7 @@ namespace ClothingStore.Controllers
         // POST: Brands/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BrandId,Name,Country,Description,FoundedYear")] Brand brand)
+        public IActionResult Edit(int id, Brand brand)
         {
             if (id != brand.BrandId) return NotFound();
 
@@ -80,7 +79,7 @@ namespace ClothingStore.Controllers
             try
             {
                 _context.Update(brand);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -93,12 +92,12 @@ namespace ClothingStore.Controllers
         }
 
         // GET: Brands/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null) return NotFound();
 
-            var brand = await _context.Brands
-                .FirstOrDefaultAsync(b => b.BrandId == id);
+            var brand = _context.Brands
+                .FirstOrDefault(b => b.BrandId == id);
 
             if (brand == null) return NotFound();
 
@@ -108,13 +107,13 @@ namespace ClothingStore.Controllers
         // POST: Brands/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var brand = await _context.Brands.FindAsync(id);
+            var brand = _context.Brands.Find(id);
             if (brand != null)
             {
                 _context.Brands.Remove(brand);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
 
             TempData["SuccessMessage"] = "Brand deleted successfully!";

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,21 +19,21 @@ namespace ClothingStore.Controllers
         }
 
         // GET: Categories
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            return View(_context.Categories.ToList());
         }
 
         // GET: Categories/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
+            var category = _context.Categories
+                .FirstOrDefault(m => m.CategoryId == id);
             if (category == null)
             {
                 return NotFound();
@@ -54,31 +53,29 @@ namespace ClothingStore.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Category category)
+        public IActionResult Create(Category category)
         {
-            // DEBUG: Check ModelState
             if (!ModelState.IsValid)
             {
-                // TEMP: Show validation errors clearly
                 return View(category);
             }
 
             category.ImageUrl = NormalizeCategoryImageUrl(category.ImageUrl);
             _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
 
         // GET: Categories/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories.FindAsync(id);
+            var category = _context.Categories.Find(id);
             if (category == null)
             {
                 return NotFound();
@@ -91,7 +88,7 @@ namespace ClothingStore.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CategoryId,Name,Description,ImageUrl,IsActive")] Category category)
+        public IActionResult Edit(int id, Category category)
         {
             if (id != category.CategoryId)
             {
@@ -104,7 +101,7 @@ namespace ClothingStore.Controllers
                 {
                     category.ImageUrl = NormalizeCategoryImageUrl(category.ImageUrl);
                     _context.Update(category);
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -123,15 +120,15 @@ namespace ClothingStore.Controllers
         }
 
         // GET: Categories/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
+            var category = _context.Categories
+                .FirstOrDefault(m => m.CategoryId == id);
             if (category == null)
             {
                 return NotFound();
@@ -143,15 +140,15 @@ namespace ClothingStore.Controllers
         // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            var category = _context.Categories.Find(id);
             if (category != null)
             {
                 _context.Categories.Remove(category);
             }
 
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 

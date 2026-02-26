@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/anamikarawat/Downloads/ClothingStore/ClothingStore/ClothingStore/ClothingStore.csproj": {}
+    "/Users/anamikarawat/Desktop/🎒Conestoga 🎒/Semester 2/MS Web Technologies(dot net)/Group Project/ClothingStore/ClothingStore/ClothingStore.csproj": {}
   },
   "projects": {
-    "/Users/anamikarawat/Downloads/ClothingStore/ClothingStore/ClothingStore/ClothingStore.csproj": {
+    "/Users/anamikarawat/Desktop/🎒Conestoga 🎒/Semester 2/MS Web Technologies(dot net)/Group Project/ClothingStore/ClothingStore/ClothingStore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/anamikarawat/Downloads/ClothingStore/ClothingStore/ClothingStore/ClothingStore.csproj",
+        "projectUniqueName": "/Users/anamikarawat/Desktop/🎒Conestoga 🎒/Semester 2/MS Web Technologies(dot net)/Group Project/ClothingStore/ClothingStore/ClothingStore.csproj",
         "projectName": "ClothingStore",
-        "projectPath": "/Users/anamikarawat/Downloads/ClothingStore/ClothingStore/ClothingStore/ClothingStore.csproj",
+        "projectPath": "/Users/anamikarawat/Desktop/🎒Conestoga 🎒/Semester 2/MS Web Technologies(dot net)/Group Project/ClothingStore/ClothingStore/ClothingStore.csproj",
         "packagesPath": "/Users/anamikarawat/.nuget/packages/",
-        "outputPath": "/Users/anamikarawat/Downloads/ClothingStore/ClothingStore/ClothingStore/obj/",
+        "outputPath": "/Users/anamikarawat/Desktop/🎒Conestoga 🎒/Semester 2/MS Web Technologies(dot net)/Group Project/ClothingStore/ClothingStore/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/anamikarawat/.nuget/NuGet/NuGet.Config"

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,23 +19,23 @@ namespace ClothingStore.Controllers
         }
 
         // GET: OrderItems
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var applicationDbContext = _context.OrderItems
                 .Include(o => o.Order)
                 .Include(o => o.Product);
-            return View(await applicationDbContext.ToListAsync());
+            return View(applicationDbContext.ToList());
         }
 
         // GET: OrderItems/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null) return NotFound();
 
-            var orderItem = await _context.OrderItems
+            var orderItem = _context.OrderItems
                 .Include(o => o.Order)
                 .Include(o => o.Product)
-                .FirstOrDefaultAsync(m => m.OrderItemId == id);
+                .FirstOrDefault(m => m.OrderItemId == id);
 
             if (orderItem == null) return NotFound();
 
@@ -63,12 +62,12 @@ namespace ClothingStore.Controllers
         // POST: OrderItems/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OrderItemId,OrderId,ProductId,Quantity")] OrderItem orderItem)
+        public IActionResult Create(OrderItem orderItem)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(orderItem);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
 
@@ -87,11 +86,11 @@ namespace ClothingStore.Controllers
         }
 
         // GET: OrderItems/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null) return NotFound();
 
-            var orderItem = await _context.OrderItems.FindAsync(id);
+            var orderItem = _context.OrderItems.Find(id);
             if (orderItem == null) return NotFound();
 
             ViewData["OrderId"] = _context.Orders
@@ -111,7 +110,7 @@ namespace ClothingStore.Controllers
         // POST: OrderItems/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrderItemId,OrderId,ProductId,Quantity")] OrderItem orderItem)
+        public IActionResult Edit(int id, OrderItem orderItem)
         {
             if (id != orderItem.OrderItemId) return NotFound();
 
@@ -120,7 +119,7 @@ namespace ClothingStore.Controllers
                 try
                 {
                     _context.Update(orderItem);
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -145,14 +144,14 @@ namespace ClothingStore.Controllers
         }
 
         // GET: OrderItems/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null) return NotFound();
 
-            var orderItem = await _context.OrderItems
+            var orderItem = _context.OrderItems
                 .Include(o => o.Order)
                 .Include(o => o.Product)
-                .FirstOrDefaultAsync(m => m.OrderItemId == id);
+                .FirstOrDefault(m => m.OrderItemId == id);
 
             if (orderItem == null) return NotFound();
 
@@ -162,15 +161,15 @@ namespace ClothingStore.Controllers
         // POST: OrderItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var orderItem = await _context.OrderItems.FindAsync(id);
+            var orderItem = _context.OrderItems.Find(id);
             if (orderItem != null)
             {
                 _context.OrderItems.Remove(orderItem);
             }
 
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 

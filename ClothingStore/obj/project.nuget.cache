@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dI2rc91iKkk=",
+  "dgSpecHash": "+5YuW3DGhZI=",
   "success": true,
-  "projectFilePath": "/Users/anamikarawat/Downloads/ClothingStore/ClothingStore/ClothingStore/ClothingStore.csproj",
+  "projectFilePath": "/Users/anamikarawat/Desktop/\uD83C\uDF92Conestoga \uD83C\uDF92/Semester 2/MS Web Technologies(dot net)/Group Project/ClothingStore/ClothingStore/ClothingStore.csproj",
   "expectedPackageFiles": [
     "/Users/anamikarawat/.nuget/packages/azure.core/1.47.1/azure.core.1.47.1.nupkg.sha512",
     "/Users/anamikarawat/.nuget/packages/azure.identity/1.14.2/azure.identity.1.14.2.nupkg.sha512",

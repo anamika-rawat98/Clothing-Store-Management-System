@@ -15,15 +15,15 @@ namespace ClothingStore.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var vm = new DashboardViewModel
             {
-                TotalCategories = await _context.Categories.CountAsync(),
-                TotalBrands = await _context.Brands.CountAsync(),
-                TotalProducts = await _context.Products.CountAsync(),
-                TotalCustomers = await _context.Customers.CountAsync(),
-                TotalOrders = await _context.Orders.CountAsync()
+                TotalCategories = _context.Categories.Count(),
+                TotalBrands = _context.Brands.Count(),
+                TotalProducts = _context.Products.Count(),
+                TotalCustomers = _context.Customers.Count(),
+                TotalOrders = _context.Orders.Count()
             };
 
             return View(vm);

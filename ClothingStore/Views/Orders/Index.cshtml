@@ -33,9 +33,16 @@
                     <td>@order.Status</td>
                     <td>@order.TotalAmount.ToString("C")</td>
                     <td>
-                        @foreach (var item in order.OrderItems)
+                        @if (order.OrderItems.Any())
                         {
-                            <div>@item.Product.Name (Qty: @item.Quantity)</div>
+                            @foreach (var item in order.OrderItems)
+                            {
+                                <div>@(item.Product?.Name ?? $"Product #{item.ProductId}") (Qty: @item.Quantity)</div>
+                            }
+                        }
+                        else
+                        {
+                            <span class="text-muted">No products in this order</span>
                         }
                     </td>
                     <td>

@@ -30,20 +30,8 @@ public class OrdersController : Controller
     // ================= CREATE (GET) =================
     public IActionResult Create()
     {
-        var vm = new OrderVM
-        {
-            Customers = _context.Customers.Select(c => new SelectListItem
-            {
-                Value = c.CustomerId.ToString(),
-                Text = c.FirstName + " " + c.LastName
-            }).ToList(),
-
-            Products = _context.Products.Select(p => new SelectListItem
-            {
-                Value = p.ProductId.ToString(),
-                Text = p.Name
-            }).ToList()
-        };
+        var vm = new OrderVM();
+        PopulateOrderCreateDropdowns(vm);
 
         return View(vm);
     }
@@ -51,59 +39,84 @@ public class OrdersController : Controller
     // ================= CREATE (POST) =================
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Create(OrderVM vm)
+    public IActionResult Create(int customerId, string? status, int[]? productIds, int[]? quantities)
     {
+        if (customerId <= 0)
+        {
+            ModelState.AddModelError("CustomerId", "Please select a customer.");
+        }
+
+        if (string.IsNullOrWhiteSpace(status))
+        {
+            ModelState.AddModelError("Status", "Please select an order status.");
+        }
+
+        if (productIds == null || quantities == null || productIds.Length == 0 || productIds.Length != quantities.Length)
+        {
+            ModelState.AddModelError("", "Please add at least one product with quantity.");
+        }
+
+        if (quantities != null && quantities.Any(q => q < 1))
+        {
+            ModelState.AddModelError("", "Quantity must be at least 1.");
+        }
+
         if (!ModelState.IsValid)
         {
-            vm.Customers = _context.Customers.Select(c => new SelectListItem
+            var vm = new OrderVM
             {
-                Value = c.CustomerId.ToString(),
-                Text = c.FirstName + " " + c.LastName
-            }).ToList();
-
-            vm.Products = _context.Products.Select(p => new SelectListItem
-            {
-                Value = p.ProductId.ToString(),
-                Text = p.Name
-            }).ToList();
-
+                CustomerId = customerId,
+                Status = status ?? "Pending"
+            };
+            PopulateOrderCreateDropdowns(vm);
             return View(vm);
         }
 
-        var selectedProduct = _context.Products.FirstOrDefault(p => p.ProductId == vm.ProductId);
-        if (selectedProduct == null)
+        var selectedProductIds = productIds!;
+        var selectedQuantities = quantities!;
+        var orderStatus = status!;
+
+        var pricesByProductId = _context.Products
+            .Where(p => selectedProductIds.Contains(p.ProductId))
+            .Select(p => new { p.ProductId, p.Price })
+            .ToDictionary(p => p.ProductId, p => p.Price);
+
+        if (pricesByProductId.Count != selectedProductIds.Distinct().Count())
         {
-            ModelState.AddModelError(nameof(vm.ProductId), "Selected product is invalid.");
-
-            vm.Customers = _context.Customers.Select(c => new SelectListItem
+            ModelState.AddModelError("", "One or more selected products are invalid.");
+            var vm = new OrderVM
             {
-                Value = c.CustomerId.ToString(),
-                Text = c.FirstName + " " + c.LastName
-            }).ToList();
-
-            vm.Products = _context.Products.Select(p => new SelectListItem
-            {
-                Value = p.ProductId.ToString(),
-                Text = p.Name
-            }).ToList();
-
+                CustomerId = customerId,
+                Status = orderStatus
+            };
+            PopulateOrderCreateDropdowns(vm);
             return View(vm);
+        }
+
+        decimal totalAmount = 0m;
+        var orderItems = new List<OrderItem>();
+        for (int i = 0; i < selectedProductIds.Length; i++)
+        {
+            if (!pricesByProductId.TryGetValue(selectedProductIds[i], out var price))
+            {
+                continue;
+            }
+
+            totalAmount += price * selectedQuantities[i];
+            orderItems.Add(new OrderItem
+            {
+                ProductId = selectedProductIds[i],
+                Quantity = selectedQuantities[i]
+            });
         }
 
         var order = new Order
         {
             OrderDate = DateTime.Now,
-            CustomerId = vm.CustomerId,
-            Status = vm.Status,
-            TotalAmount = selectedProduct.Price * vm.Quantity,
-            OrderItems = new List<OrderItem>
-            {
-                new OrderItem
-                {
-                    ProductId = vm.ProductId,
-                    Quantity = vm.Quantity
-                }
-            }
+            CustomerId = customerId,
+            Status = orderStatus,
+            TotalAmount = totalAmount,
+            OrderItems = orderItems
         };
 
         _context.Orders.Add(order);
@@ -136,22 +149,43 @@ public class OrdersController : Controller
         return View(order);
     }
 
+    // ================= DETAILS =================
+    public IActionResult Details(int id)
+    {
+        var order = _context.Orders
+            .Include(o => o.Customer)
+            .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+            .FirstOrDefault(o => o.OrderId == id);
+
+        if (order == null) return NotFound();
+        return View(order);
+    }
+
     // ================= EDIT (POST) =================
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Edit(int orderId, int[] productIds, int[] quantities, string status)
+    public IActionResult Edit(int orderId, int[]? productIds, int[]? quantities, string? status)
     {
-        if (productIds.Length != quantities.Length)
-        {
-            ModelState.AddModelError("", "Products and quantities mismatch.");
-        }
-
         var order = _context.Orders
             .Include(o => o.OrderItems)
             .Include(o => o.Customer)
             .FirstOrDefault(o => o.OrderId == orderId);
 
         if (order == null) return NotFound();
+
+        if (productIds == null || quantities == null || productIds.Length == 0 || productIds.Length != quantities.Length)
+        {
+            ModelState.AddModelError("", "Please add at least one product with quantity.");
+        }
+        if (quantities != null && quantities.Any(q => q < 1))
+        {
+            ModelState.AddModelError("", "Quantity must be at least 1.");
+        }
+        if (string.IsNullOrWhiteSpace(status))
+        {
+            ModelState.AddModelError("", "Order status is required.");
+        }
 
         if (!ModelState.IsValid)
         {
@@ -163,35 +197,39 @@ public class OrdersController : Controller
             return View(order);
         }
 
+        var selectedProductIds = productIds!;
+        var selectedQuantities = quantities!;
+        var orderStatus = status!;
+
         // Remove old items
         _context.OrderItems.RemoveRange(order.OrderItems);
         _context.SaveChanges();
 
         // Add updated items
-        for (int i = 0; i < productIds.Length; i++)
+        for (int i = 0; i < selectedProductIds.Length; i++)
         {
             order.OrderItems.Add(new OrderItem
             {
-                ProductId = productIds[i],
-                Quantity = quantities[i]
+                ProductId = selectedProductIds[i],
+                Quantity = selectedQuantities[i]
             });
         }
 
         var pricesByProductId = _context.Products
-            .Where(p => productIds.Contains(p.ProductId))
+            .Where(p => selectedProductIds.Contains(p.ProductId))
             .Select(p => new { p.ProductId, p.Price })
             .ToDictionary(p => p.ProductId, p => p.Price);
 
         decimal totalAmount = 0m;
-        for (int i = 0; i < productIds.Length; i++)
+        for (int i = 0; i < selectedProductIds.Length; i++)
         {
-            if (pricesByProductId.TryGetValue(productIds[i], out var price))
+            if (pricesByProductId.TryGetValue(selectedProductIds[i], out var price))
             {
-                totalAmount += price * quantities[i];
+                totalAmount += price * selectedQuantities[i];
             }
         }
 
-        order.Status = string.IsNullOrWhiteSpace(status) ? order.Status : status;
+        order.Status = orderStatus;
         order.TotalAmount = totalAmount;
 
         _context.SaveChanges();
@@ -224,5 +262,20 @@ public class OrdersController : Controller
 
         TempData["SuccessMessage"] = "Order deleted successfully!";
         return RedirectToAction(nameof(Index));
+    }
+
+    private void PopulateOrderCreateDropdowns(OrderVM vm)
+    {
+        vm.Customers = _context.Customers.Select(c => new SelectListItem
+        {
+            Value = c.CustomerId.ToString(),
+            Text = c.FirstName + " " + c.LastName
+        }).ToList();
+
+        vm.Products = _context.Products.Select(p => new SelectListItem
+        {
+            Value = p.ProductId.ToString(),
+            Text = p.Name
+        }).ToList();
     }
 }

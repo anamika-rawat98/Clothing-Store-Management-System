@@ -16,6 +16,7 @@
     <div class="col-md-8">
         <form asp-action="Edit" method="post">
             <input type="hidden" asp-for="OrderId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group mb-3">
                 <label for="status">Order Status</label>
                 <select id="status" name="status" class="form-control">
@@ -67,35 +68,58 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @for (int i = 0; i < orderItems.Count; i++)
+                    @if (orderItems.Count == 0)
                     {
-                        var item = orderItems[i];
                         <tr>
                             <td>
                                 <select name="productIds" class="form-control">
                                     @foreach (var p in ViewBag.Products)
                                     {
-                                        if (p.Value == item.ProductId.ToString())
-                                        {
-                                            <option value="@p.Value" selected>@p.Text</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@p.Value">@p.Text</option>
-                                        }
+                                        <option value="@p.Value">@p.Text</option>
                                     }
                                 </select>
                             </td>
                             <td>
-                                <input type="number" name="quantities" value="@item.Quantity" class="form-control" min="1" />
+                                <input type="number" name="quantities" value="1" class="form-control" min="1" />
                             </td>
                             <td>
                                 <button type="button" class="btn btn-danger btn-sm removeBtn">X</button>
                             </td>
                         </tr>
                     }
+                    else
+                    {
+                        @for (int i = 0; i < orderItems.Count; i++)
+                        {
+                            var item = orderItems[i];
+                            <tr>
+                                <td>
+                                    <select name="productIds" class="form-control">
+                                        @foreach (var p in ViewBag.Products)
+                                        {
+                                            if (p.Value == item.ProductId.ToString())
+                                            {
+                                                <option value="@p.Value" selected>@p.Text</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@p.Value">@p.Text</option>
+                                            }
+                                        }
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" name="quantities" value="@item.Quantity" class="form-control" min="1" />
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm removeBtn">X</button>
+                                </td>
+                            </tr>
+                        }
+                    }
                 </tbody>
             </table>
+            <button type="button" id="addRowBtn" class="btn btn-outline-primary btn-sm">+ Add Product</button>
 
             <div class="form-group mt-3">
                 <input type="submit" value="Save Changes" class="btn btn-primary" />
@@ -105,14 +129,42 @@
     </div>
 </div>
 
+<template id="orderItemRowTemplate">
+    <tr>
+        <td>
+            <select name="productIds" class="form-control">
+                @foreach (var p in ViewBag.Products)
+                {
+                    <option value="@p.Value">@p.Text</option>
+                }
+            </select>
+        </td>
+        <td>
+            <input type="number" name="quantities" value="1" class="form-control" min="1" />
+        </td>
+        <td>
+            <button type="button" class="btn btn-danger btn-sm removeBtn">X</button>
+        </td>
+    </tr>
+</template>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-        document.querySelectorAll('.removeBtn').forEach(btn => {
-            btn.onclick = function () {
-                this.closest('tr').remove();
+        const table = document.getElementById('orderItemsTable');
+        const tbody = table.querySelector('tbody');
+        const rowTemplate = document.getElementById('orderItemRowTemplate');
+
+        table.addEventListener('click', function (e) {
+            if (e.target.classList.contains('removeBtn')) {
+                e.target.closest('tr').remove();
             }
+        });
+
+        document.getElementById('addRowBtn').addEventListener('click', function () {
+            const row = rowTemplate.content.firstElementChild.cloneNode(true);
+            tbody.appendChild(row);
         });
     </script>
 }
