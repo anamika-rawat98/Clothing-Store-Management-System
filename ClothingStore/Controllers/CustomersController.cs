@@ -27,6 +27,14 @@ namespace ClothingStore.Controllers
             return View();
         }
 
+        // GET: Customers/Details/5
+        public IActionResult Details(int id)
+        {
+            var customer = _context.Customers.Find(id);
+            if (customer == null) return NotFound();
+            return View(customer);
+        }
+
         // POST: Customers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]

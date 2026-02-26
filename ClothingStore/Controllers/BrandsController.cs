@@ -53,11 +53,8 @@ namespace ClothingStore.Controllers
             _context.Brands.Add(brand);
             await _context.SaveChangesAsync();
 
-            // Show success message on same page
-            ViewBag.SuccessMessage = "Brand added successfully!";
-
-            // Clear the form for next entry
-            return View(new Brand());
+            TempData["SuccessMessage"] = "Brand added successfully!";
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Brands/Edit/5

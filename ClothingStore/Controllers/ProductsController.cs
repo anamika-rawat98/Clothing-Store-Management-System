@@ -80,7 +80,7 @@ namespace ClothingStore.Controllers
             _context.SaveChanges();
 
             TempData["SuccessMessage"] = "Product added successfully!";
-            return RedirectToAction("Create");
+            return RedirectToAction("Index");
         }
 
         // EDIT - GET
