@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ClothingStore.Models.Order>
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<h1 class="mb-4">Orders</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success btn-lg btn-hover mb-3">Create New Order</a>
+</p>
+
+@if (Model.Any())
+{
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Order Date</th>
+                <th>Status</th>
+                <th>Total Amount</th>
+                <th>Products / Quantity</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.OrderId</td>
+                    <td>@order.Customer.FullName</td>
+                    <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                    <td>@order.Status</td>
+                    <td>@order.TotalAmount.ToString("C")</td>
+                    <td>
+                        @foreach (var item in order.OrderItems)
+                        {
+                            <div>@item.Product.Name (Qty: @item.Quantity)</div>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@order.OrderId" class="btn btn-sm btn-primary btn-hover me-1">Edit</a>
+                        <a asp-action="Details" asp-route-id="@order.OrderId" class="btn btn-sm btn-info btn-hover me-1">Details</a>
+                        <a asp-action="Delete" asp-route-id="@order.OrderId" class="btn btn-sm btn-danger btn-hover">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">No orders found. Please create an order.</div>
+}

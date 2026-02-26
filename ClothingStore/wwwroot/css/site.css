@@ -1,0 +1,289 @@
+/* ============================= */
+/*        GLOBAL VARIABLES       */
+/* ============================= */
+:root {
+    --brand: #6f42c1;
+    --brand2: #20c997;
+    --bg: #0b1220;
+    --surface: #111827;
+    --surface-2: #0f172a;
+    --border: rgba(255,255,255,.08);
+    --text: rgba(255,255,255,.92);
+    --muted: rgba(255,255,255,.62);
+}
+
+/* ============================= */
+/*        DARK DEFAULT BODY      */
+/* ============================= */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 500;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* Muted text across site */
+.text-muted {
+    color: var(--muted) !important;
+}
+
+/* Links */
+a {
+    color: rgba(255,255,255,.88);
+}
+
+    a:hover {
+        color: #fff;
+    }
+
+/* ============================= */
+/*            NAVBAR             */
+/* ============================= */
+.brand-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--brand), var(--brand2));
+}
+
+/* Apply styling ONLY when navbar is dark */
+.navbar.navbar-dark .nav-link {
+    color: rgba(255,255,255,.85) !important;
+    border-radius: 10px;
+    padding: .5rem .75rem;
+    transition: all .2s ease;
+}
+
+    .navbar.navbar-dark .nav-link:hover {
+        background: rgba(255,255,255,.10);
+        color: #fff !important;
+    }
+
+/* ============================= */
+/*             HERO              */
+/* ============================= */
+.hero {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    min-height: 380px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 18px 55px rgba(0,0,0,.35);
+    background-size: cover;
+    background-position: center;
+}
+
+    /* Dark luxury overlay + colorful gradients */
+    .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient( 120deg, rgba(111,66,193,0.82), rgba(32,201,151,0.58), rgba(0,0,0,0.78) );
+    }
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 3.5rem 2.5rem;
+    max-width: 760px;
+    color: #fff;
+}
+
+.hero-title {
+    font-weight: 900;
+    letter-spacing: -0.6px;
+}
+
+.hero-sub {
+    opacity: .9;
+}
+
+/* ============================= */
+/*      CARDS (DASHBOARD)        */
+/* ============================= */
+.card,
+.feature-card {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.28);
+}
+
+.feature-card {
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+    .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 18px 45px rgba(0,0,0,.36);
+    }
+
+.icon-badge {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background: linear-gradient(135deg, var(--brand), var(--brand2));
+}
+
+/* ============================= */
+/*          STATS CARDS          */
+/* ============================= */
+.stat-card {
+    border-radius: 18px;
+    padding: 18px 18px 16px;
+    color: #fff;
+    box-shadow: 0 14px 35px rgba(0,0,0,.30);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+    .stat-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 24px 60px rgba(0,0,0,.40);
+    }
+
+.stat-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.stat-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,.18);
+    font-size: 20px;
+}
+
+.stat-label {
+    font-weight: 800;
+    opacity: .92;
+}
+
+.stat-value {
+    font-size: 42px;
+    font-weight: 900;
+    margin-top: 14px;
+    letter-spacing: -1px;
+}
+
+/* Stat gradients */
+.stat-purple {
+    background: linear-gradient(135deg, #6f42c1, #8b5cf6);
+}
+
+.stat-teal {
+    background: linear-gradient(135deg, #20c997, #06b6d4);
+}
+
+.stat-blue {
+    background: linear-gradient(135deg, #0d6efd, #38bdf8);
+}
+
+.stat-dark {
+    background: linear-gradient(135deg, #111827, #374151);
+}
+
+/* ============================= */
+/*            TABLES             */
+/* ============================= */
+.table {
+    font-weight: 500;
+    background: var(--surface) !important;
+    color: var(--text) !important;
+    border-radius: 0.6rem;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+    .table thead {
+        background: #1f2937 !important;
+        color: #fff !important;
+    }
+
+    .table td, .table th {
+        border-color: rgba(255,255,255,.08) !important;
+        vertical-align: middle !important;
+    }
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: var(--surface-2) !important;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(255,255,255,.06) !important;
+}
+
+/* ============================= */
+/*            BUTTONS            */
+/* ============================= */
+table .btn {
+    font-weight: 700;
+    padding: 0.35rem 0.65rem;
+    border-radius: 0.45rem;
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.btn-hover:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+}
+
+/* Make outline-dark look good on dark background */
+.btn-outline-dark {
+    border-color: rgba(255,255,255,.30) !important;
+    color: rgba(255,255,255,.86) !important;
+}
+
+    .btn-outline-dark:hover {
+        background: rgba(255,255,255,.10) !important;
+        color: #fff !important;
+    }
+
+/* Button links */
+a.btn, a.btn-sm {
+    text-decoration: none !important;
+}
+
+/* ============================= */
+/*            ALERTS             */
+/* ============================= */
+.alert {
+    font-weight: 600;
+}
+
+/* ============================= */
+/*           HEADINGS            */
+/* ============================= */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 800;
+    color: #fff;
+}
+
+/* ============================= */
+/*            FOOTER             */
+/* ============================= */
+.site-footer {
+    background-color: var(--bg);
+    color: rgba(255,255,255,.70);
+    border-top: 1px solid rgba(255,255,255,.08);
+}
+
+    .site-footer a {
+        color: rgba(255,255,255,.85);
+        text-decoration: none;
+    }
+
+        .site-footer a:hover {
+            text-decoration: underline;
+        }

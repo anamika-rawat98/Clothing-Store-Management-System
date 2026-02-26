@@ -1,0 +1,62 @@
+﻿@model IEnumerable<ClothingStore.Models.Product>
+
+@{
+    ViewData["Title"] = "Products List";
+}
+
+<h1 class="mb-4">Products List</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Add New Product</a>
+</p>
+
+@if (Model.Any())
+{
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Image</th>
+                <th>Color</th>
+                <th>Brand</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>@product.Price.ToString("C")</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(product.ImageUrl))
+                        {
+                            var imagePath = product.ImageUrl.StartsWith("http://") || product.ImageUrl.StartsWith("https://") || product.ImageUrl.StartsWith("/")
+                                ? product.ImageUrl
+                                : $"/images/{product.ImageUrl}";
+                            <img src="@imagePath" alt="@product.Name" style="width:60px;height:60px;object-fit:cover;" class="rounded" />
+                        }
+                        else
+                        {
+                            <span>No image</span>
+                        }
+                    </td>
+                    <td>@product.Color</td>
+                    <td>@product.Brand.Name</td>
+                    <td>@product.Category.Name</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@product.ProductId" class="btn btn-sm btn-hover me-1">Edit</a>
+                        <a asp-action="Details" asp-route-id="@product.ProductId" class="btn btn-sm btn-info me-1">Details</a>
+                        <a asp-action="Delete" asp-route-id="@product.ProductId" class="btn btn-sm btn-hover">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">No products found. Please add a product.</div>
+}

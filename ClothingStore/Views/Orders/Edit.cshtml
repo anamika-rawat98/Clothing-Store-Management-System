@@ -1,0 +1,118 @@
+﻿@model ClothingStore.Models.Order
+
+@{
+    ViewData["Title"] = "Edit Order";
+    var orderItems = Model.OrderItems.ToList();
+}
+
+<h1>Edit Order</h1>
+
+<h4>Customer: @Model.Customer?.FullName</h4>
+<h4>Order Date: @Model.OrderDate.ToString("yyyy-MM-dd")</h4>
+<h4>Total Amount: @Model.TotalAmount.ToString("C")</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="OrderId" />
+            <div class="form-group mb-3">
+                <label for="status">Order Status</label>
+                <select id="status" name="status" class="form-control">
+                    @if ((string?)ViewBag.OrderStatus == "Pending")
+                    {
+                        <option value="Pending" selected>Pending</option>
+                    }
+                    else
+                    {
+                        <option value="Pending">Pending</option>
+                    }
+
+                    @if ((string?)ViewBag.OrderStatus == "Processing")
+                    {
+                        <option value="Processing" selected>Processing</option>
+                    }
+                    else
+                    {
+                        <option value="Processing">Processing</option>
+                    }
+
+                    @if ((string?)ViewBag.OrderStatus == "Shipped")
+                    {
+                        <option value="Shipped" selected>Shipped</option>
+                    }
+                    else
+                    {
+                        <option value="Shipped">Shipped</option>
+                    }
+
+                    @if ((string?)ViewBag.OrderStatus == "Delivered")
+                    {
+                        <option value="Delivered" selected>Delivered</option>
+                    }
+                    else
+                    {
+                        <option value="Delivered">Delivered</option>
+                    }
+                </select>
+            </div>
+
+            <h5>Products in Order</h5>
+            <table class="table" id="orderItemsTable">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < orderItems.Count; i++)
+                    {
+                        var item = orderItems[i];
+                        <tr>
+                            <td>
+                                <select name="productIds" class="form-control">
+                                    @foreach (var p in ViewBag.Products)
+                                    {
+                                        if (p.Value == item.ProductId.ToString())
+                                        {
+                                            <option value="@p.Value" selected>@p.Text</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@p.Value">@p.Text</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                <input type="number" name="quantities" value="@item.Quantity" class="form-control" min="1" />
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm removeBtn">X</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Save Changes" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.querySelectorAll('.removeBtn').forEach(btn => {
+            btn.onclick = function () {
+                this.closest('tr').remove();
+            }
+        });
+    </script>
+}

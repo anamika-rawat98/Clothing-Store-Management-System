@@ -1,0 +1,147 @@
+﻿@model ClothingStore.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- HERO -->
+<section class="hero mb-4" style="background-image:url('/images/hero-clothing.jpg')">
+    <div class="hero-content">
+        <span class="badge rounded-pill text-bg-light text-dark mb-3 px-3 py-2 shadow-sm">
+            Admin Dashboard • .NET 10
+        </span>
+
+        <h1 class="display-5 hero-title mb-3">Welcome to ClothingStore</h1>
+        <p class="lead hero-sub mb-4">
+            Manage categories, brands, products, customers, and orders from one place.
+        </p>
+
+        <div class="d-flex gap-2 flex-wrap">
+            <a class="btn btn-light btn-lg px-4 shadow" asp-controller="Products" asp-action="Index">Manage Products</a>
+            <a class="btn btn-outline-light btn-lg px-4 shadow" asp-controller="Orders" asp-action="Index">View Orders</a>
+        </div>
+    </div>
+</section>
+
+<!-- STATS -->
+<div class="row g-3 mb-4">
+    <div class="col-md-6 col-lg-3">
+        <div class="stat-card stat-purple">
+            <div class="stat-top">
+                <div class="stat-icon">🏷️</div>
+                <div class="stat-label">Categories</div>
+            </div>
+            <div class="stat-value">@Model.TotalCategories</div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <div class="stat-card stat-teal">
+            <div class="stat-top">
+                <div class="stat-icon">✅</div>
+                <div class="stat-label">Brands</div>
+            </div>
+            <div class="stat-value">@Model.TotalBrands</div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <div class="stat-card stat-blue">
+            <div class="stat-top">
+                <div class="stat-icon">📦</div>
+                <div class="stat-label">Products</div>
+            </div>
+            <div class="stat-value">@Model.TotalProducts</div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <div class="stat-card stat-dark">
+            <div class="stat-top">
+                <div class="stat-icon">👥</div>
+                <div class="stat-label">Customers</div>
+            </div>
+            <div class="stat-value">@Model.TotalCustomers</div>
+        </div>
+    </div>
+</div>
+
+<!-- QUICK ACTIONS -->
+<h2 class="h4 fw-bold mb-3">Quick Actions</h2>
+
+<div class="row g-3">
+    <div class="col-md-6 col-lg-4">
+        <div class="card feature-card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="icon-badge">🏷️</div>
+                    <div>
+                        <div class="fw-bold">Categories</div>
+                        <div class="text-muted small">Organize product groups</div>
+                    </div>
+                </div>
+                <a class="btn btn-outline-dark w-100" asp-controller="Categories" asp-action="Index">Open</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="card feature-card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="icon-badge">✅</div>
+                    <div>
+                        <div class="fw-bold">Brands</div>
+                        <div class="text-muted small">Manage brand list</div>
+                    </div>
+                </div>
+                <a class="btn btn-outline-dark w-100" asp-controller="Brands" asp-action="Index">Open</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="card feature-card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="icon-badge">📦</div>
+                    <div>
+                        <div class="fw-bold">Products</div>
+                        <div class="text-muted small">Add & update inventory</div>
+                    </div>
+                </div>
+                <a class="btn btn-dark w-100" asp-controller="Products" asp-action="Index">Open</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="card feature-card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="icon-badge">👥</div>
+                    <div>
+                        <div class="fw-bold">Customers</div>
+                        <div class="text-muted small">Customer management</div>
+                    </div>
+                </div>
+                <a class="btn btn-outline-dark w-100" asp-controller="Customers" asp-action="Index">Open</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="card feature-card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="icon-badge">🧾</div>
+                    <div>
+                        <div class="fw-bold">Orders</div>
+                        <div class="text-muted small">Track and manage orders</div>
+                    </div>
+                </div>
+                <a class="btn btn-outline-dark w-100" asp-controller="Orders" asp-action="Index">Open</a>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,36 @@
+﻿@model ClothingStore.Models.OrderItem
+
+@{
+    ViewData["Title"] = "Order Item Details";
+}
+
+<h1 class="mb-3">Order Item Details</h1>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+    <dl class="row mb-0">
+        <dt class="col-sm-3 text-muted">
+            @Html.DisplayNameFor(model => model.Order)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Order.OrderId)
+        </dd>
+        <dt class="col-sm-3 text-muted">
+            @Html.DisplayNameFor(model => model.Product)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Product.Name)
+        </dd>
+        <dt class="col-sm-3 text-muted">
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+    </dl>
+    </div>
+</div>
+<div class="mt-3 d-flex gap-2">
+    <a asp-action="Edit" asp-route-id="@Model?.OrderItemId" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+</div>

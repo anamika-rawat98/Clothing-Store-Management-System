@@ -1,0 +1,42 @@
+﻿@model ClothingStore.Models.Brand
+
+@{
+    ViewData["Title"] = "Brand Details";
+}
+
+<h1 class="mb-3">Brand Details</h1>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <dl class="row mb-0">
+        <dt class="col-sm-3 text-muted">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-3 text-muted">
+            @Html.DisplayNameFor(model => model.Country)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Country)
+        </dd>
+        <dt class="col-sm-3 text-muted">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-3 text-muted">
+            @Html.DisplayNameFor(model => model.FoundedYear)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.FoundedYear)
+        </dd>
+    </dl>
+    </div>
+</div>
+<div class="mt-3 d-flex gap-2">
+    <a asp-action="Edit" asp-route-id="@Model?.BrandId" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+</div>

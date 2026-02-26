@@ -1,0 +1,57 @@
+﻿@model IEnumerable<ClothingStore.Models.Category>
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<h1 class="mb-4">Categories</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success btn-lg btn-hover mb-3">Create New Category</a>
+</p>
+
+@if (Model.Any())
+{
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Active</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                        {
+                            var imagePath = item.ImageUrl.StartsWith("http://") || item.ImageUrl.StartsWith("https://") || item.ImageUrl.StartsWith("/")
+                                ? item.ImageUrl
+                                : $"/images/categories/{item.ImageUrl}";
+                            <img src="@imagePath" alt="@item.Name" style="width:60px;height:60px;object-fit:cover;" class="rounded" />
+                        }
+                        else
+                        {
+                            <span>No image</span>
+                        }
+                    </td>
+                    <td>@item.IsActive</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.CategoryId" class="btn btn-sm btn-primary btn-hover me-1">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.CategoryId" class="btn btn-sm btn-info btn-hover me-1">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.CategoryId" class="btn btn-sm btn-danger btn-hover">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">No categories found. Please add a category.</div>
+}
